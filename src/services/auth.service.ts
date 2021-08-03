@@ -24,10 +24,10 @@ export class AuthService {
   }
 
   successfullLogin(authorizationValue: string) {
-    let token = authorizationValue.substring(7);
+    let tok = authorizationValue.substring(7);
     let user: localUser = {
-      token,
-      email: this.jwtHelper.decodeToken(token).sub
+      token: tok,
+      email: this.jwtHelper.decodeToken(tok).sub
     }
     this.storage.setLocalUser(user);
   }
