@@ -24,7 +24,10 @@ export class CategoriesPage {
       .subscribe(response => {
         this.items = response;
       },
-        error => { });
+        error => {});
   }
 
+  showProducts() {
+    this.navCtrl.push('ProductsPage');
+  }
 }
