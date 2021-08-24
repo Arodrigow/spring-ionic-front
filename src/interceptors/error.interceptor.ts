@@ -1,3 +1,4 @@
+import { FieldMessage } from './../models/fieldmessage';
 import { StorageService } from './../services/storage.service';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -29,6 +30,9 @@ export class ErrorInterceptor implements HttpInterceptor {
           case 403:
             this.handle403();
             break;
+          case 422:
+            this.handle422(errorObj);
+            break;
           default:
             this.handleDefaultError(errorObj);
         }
@@ -53,6 +57,18 @@ export class ErrorInterceptor implements HttpInterceptor {
     alert.present();
   }
 
+  handle422(errorObj) {
+    const alert = this.alertControl.create({
+      title: 'Error 422: Validation',
+      message: this.listErrors(errorObj.errors),
+      enableBackdropDismiss: false,
+      buttons: [{
+        text: 'ok',
+      }]
+    });
+    alert.present();
+  }
+
   handleDefaultError(errorObj) {
     const alert = this.alertControl.create({
       title: `Error ${errorObj.status}: ${errorObj.error}`,
@@ -63,6 +79,14 @@ export class ErrorInterceptor implements HttpInterceptor {
       }]
     });
     alert.present();
+  }
+
+  listErrors(messages: FieldMessage[]) {
+    let s: string = '';
+    for (let x in messages) {
+      s = `${s} <p><strong>${messages[x].fieldName}</strong>: ${messages[x].msg} </p>`
+    }
+    return s;
   }
 
 }

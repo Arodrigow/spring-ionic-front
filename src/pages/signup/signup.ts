@@ -1,10 +1,11 @@
+import { ClientService } from './../../services/domain/client.service';
 import { CityDTO } from './../../models/city.dto';
 import { StateDTO } from './../../models/state.dto';
 import { StateService } from './../../services/domain/state.service';
 import { CityService } from './../../services/domain/city.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -21,10 +22,12 @@ export class SignupPage {
     public navParams: NavParams,
     public formBuilder: FormBuilder,
     public cityService: CityService,
-    public stateService: StateService) {
+    public stateService: StateService,
+    public clientService: ClientService,
+    public alertController: AlertController) {
 
     this.formGroup = this.formBuilder.group({
-      name: ['Oy', [Validators.required, Validators.minLength(5), Validators.maxLength(120)]],
+      name: ['Oyson', [Validators.required, Validators.minLength(5), Validators.maxLength(120)]],
       email: ['oy@gmail.com', [Validators.required, Validators.email]],
       type: ['1', [Validators.required]],
       cpfOrCnpj: ['99406311038', [Validators.required, Validators.minLength(11), Validators.maxLength(15)]],
@@ -64,8 +67,29 @@ export class SignupPage {
   }
 
   signupUser() {
-    console.log("form");
+    this.clientService.insert(this.formGroup.value).subscribe(
+      response => {
+        this.showInsertOk();
+      },
+      error => {}
+    );
   }
 
+  showInsertOk() {
+    const alert = this.alertController.create({
+      title: "Success!",
+      message: "Sign up successful.",
+      enableBackdropDismiss: false,
+      buttons: [
+        {
+          text: 'ok',
+          handler: () => {
+            this.navCtrl.pop()
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 
 }
