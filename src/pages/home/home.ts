@@ -28,7 +28,7 @@ export class HomePage {
         this.authService.successfullLogin(response.headers.get('Authorization'));
         this.navCtrl.setRoot("CategoriesPage");
       },
-      error => { }
+      error => {}
     );
   }
 
@@ -37,5 +37,16 @@ export class HomePage {
   }
   ionViewDidLeave() {
     this.menu.swipeEnable(true);
+  }
+  ionViewDidEnter() {
+
+    this.authService.refreshToken().subscribe(
+      response => {
+        this.authService.successfullLogin(response.headers.get('Authorization'));
+        this.navCtrl.setRoot("CategoriesPage");
+      },
+      error => {}
+    );
+
   }
 }
