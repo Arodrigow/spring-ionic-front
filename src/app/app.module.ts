@@ -1,3 +1,4 @@
+import { CartService } from './../services/domain/cart.service';
 import { ProductService } from './../services/domain/product.service';
 import { ClientService } from './../services/domain/client.service';
 import { StorageService } from './../services/storage.service';
@@ -38,7 +39,8 @@ import { ErrorInteceptorProvider } from '../interceptors/error.interceptor';
     AuthService,
     StorageService,
     ClientService,
-    ProductService
+    ProductService,
+    CartService
   ]
 })
 export class AppModule {}
