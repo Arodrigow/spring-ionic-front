@@ -11,7 +11,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class CategoriesPage {
 
-  items: CategoryDTO[];
+  categories: CategoryDTO[];
   bucketUrl: string = API_CONFIG.bucketBaseUrl;
 
   constructor(public navCtrl: NavController,
@@ -22,12 +22,12 @@ export class CategoriesPage {
   ionViewDidLoad() {
     this.categoryService.findAll()
       .subscribe(response => {
-        this.items = response;
+        this.categories = response;
       },
         error => {});
   }
 
-  showProducts() {
-    this.navCtrl.push('ProductsPage');
+  showProducts(category_id: string) {
+    this.navCtrl.push('ProductsPage', { category_id });
   }
 }
