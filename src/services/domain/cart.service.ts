@@ -31,4 +31,46 @@ export class CartService {
     this.storage.setCart(cart);
     return cart;
   }
+
+  removeProduct(product: ProductDTO) {
+    let cart: Cart = this.getCart();
+    let pos = cart.cartItems.findIndex(x => x.product.id == product.id);
+    if (pos != -1) {
+      cart.cartItems.splice(pos, 1)
+    }
+    this.storage.setCart(cart);
+    return cart;
+  }
+
+  addToQuantity(product: ProductDTO) {
+    let cart: Cart = this.getCart();
+    let pos = cart.cartItems.findIndex(x => x.product.id == product.id);
+    if (pos != -1) {
+      cart.cartItems[pos].quantity++;
+    }
+    this.storage.setCart(cart);
+    return cart;
+  }
+
+  subToQuantity(product: ProductDTO) {
+    let cart: Cart = this.getCart();
+    let pos = cart.cartItems.findIndex(x => x.product.id == product.id);
+    if (pos != -1) {
+      cart.cartItems[pos].quantity--;
+      if (cart.cartItems[pos].quantity < 1) {
+        cart = this.removeProduct(product);
+      }
+    }
+    this.storage.setCart(cart);
+    return cart;
+  }
+
+  total() {
+    let cart = this.getCart();
+    let sum = 0;
+    for (let cartItem of cart.cartItems) {
+      sum += cartItem.product.price * cartItem.quantity
+    }
+    return sum;
+  }
 }

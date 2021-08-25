@@ -1,3 +1,4 @@
+import { ProductDTO } from './../../models/product.dto';
 import { CartService } from './../../services/domain/cart.service';
 import { API_CONFIG } from './../../config/api.config';
 import { ProductService } from './../../services/domain/product.service';
@@ -38,4 +39,23 @@ export class CartPage {
     }
   }
 
+  removeItem(product: ProductDTO) {
+    this.items = this.cartService.removeProduct(product).cartItems;
+  }
+
+  addToQuantity(product: ProductDTO) {
+    this.items = this.cartService.addToQuantity(product).cartItems;
+  }
+
+  subToQuantity(product: ProductDTO) {
+    this.items = this.cartService.subToQuantity(product).cartItems;
+  }
+
+  total(): number {
+    return this.cartService.total();
+  }
+
+  keepShopping() {
+    this.navCtrl.setRoot('CategoriesPage')
+  }
 }
