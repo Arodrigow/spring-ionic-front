@@ -57,7 +57,6 @@ export class OrderConfirmationPage {
   }
 
   checkout() {
-    console.log(this.order.deliveryAddress)
     this.orderService.insert(this.order).subscribe(
       response => {
         console.log(response.headers.get('location'))
