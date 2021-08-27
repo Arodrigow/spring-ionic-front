@@ -1,6 +1,5 @@
 import { API_CONFIG } from './../../config/api.config';
 import { ClientDTO } from './../../models/client.dto';
-import { Observable } from 'rxjs/Rx';
 import { StorageService } from './../storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from "@angular/core";
