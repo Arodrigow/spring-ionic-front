@@ -10,7 +10,11 @@
 <ion-content padding>
   <ion-list>
     <ion-list-header> Pick delivery address </ion-list-header>
-    <button ion-item *ngFor="let address of addresses">
+    <button
+      ion-item
+      *ngFor="let address of addresses"
+      (click)="nextPage(address)"
+    >
       <h2>{{address.publicPlace}}, {{address.number}}</h2>
       <p>{{address.complement}}, {{address.district}} CEP: {{address.cep}}</p>
       <p>{{address.city.name}}, {{address.city.state.name}}</p>
