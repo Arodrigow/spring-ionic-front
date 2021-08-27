@@ -12,8 +12,8 @@
     <ion-list-header> Pick delivery address </ion-list-header>
     <button ion-item *ngFor="let address of addresses">
       <h2>{{address.publicPlace}}, {{address.number}}</h2>
-      <p>{{address.complement}},{{address.district}} CEP: {{address.cep}}</p>
-      <p>{{address.city.name}},{{address.city.state.name}}</p>
+      <p>{{address.complement}}, {{address.district}} CEP: {{address.cep}}</p>
+      <p>{{address.city.name}}, {{address.city.state.name}}</p>
     </button>
   </ion-list>
 </ion-content>
