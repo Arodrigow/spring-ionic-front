@@ -1,6 +1,6 @@
 export interface ClientDTO {
   id: string,
-  nome: string,
+  name: string,
   email: string,
   profilePicUrl?: string
 }
