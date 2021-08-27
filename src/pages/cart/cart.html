@@ -43,7 +43,13 @@
     </ion-item>
   </ion-list>
   <button ion-button block (click)="keepShopping()">Keep shopping! =)</button>
-  <button ion-button block color="secondary" (click)="checkout()">
+  <button
+    ion-button
+    block
+    color="secondary"
+    (click)="checkout()"
+    *ngIf="total() > 0"
+  >
     Checkout
   </button>
 </ion-content>

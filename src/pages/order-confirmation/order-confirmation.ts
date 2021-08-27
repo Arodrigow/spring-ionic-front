@@ -1,3 +1,4 @@
+import { OrderService } from './../../services/domain/order.service';
 import { AddressDTO } from './../../models/address.dto';
 import { ClientDTO } from './../../models/client.dto';
 import { ClientService } from './../../services/domain/client.service';
@@ -23,7 +24,8 @@ export class OrderConfirmationPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public cartService: CartService,
-    public clientService: ClientService) {
+    public clientService: ClientService,
+    public orderService: OrderService) {
     this.order = this.navParams.get('order');
   }
 
@@ -33,7 +35,7 @@ export class OrderConfirmationPage {
     this.clientService.findById(this.order.client.id).subscribe(
       response => {
         this.client = response as ClientDTO;
-        this.address = this.findAddress(this.order.addressDelivery.id, response['addresses']);
+        this.address = this.findAddress(this.order.deliveryAddress.id, response['addresses']);
       },
       error => {
         this.navCtrl.setRoot('HomePage');
@@ -48,5 +50,24 @@ export class OrderConfirmationPage {
 
   total() {
     return this.cartService.total();
+  }
+
+  back() {
+    return this.navCtrl.setRoot('CartPage')
+  }
+
+  checkout() {
+    console.log(this.order.deliveryAddress)
+    this.orderService.insert(this.order).subscribe(
+      response => {
+        console.log(response.headers.get('location'))
+        this.cartService.createOrClearCart();
+      },
+      error => {
+        if (error.status == 403) {
+          this.navCtrl.setRoot('HomePage');
+        }
+      }
+    );
   }
 }
