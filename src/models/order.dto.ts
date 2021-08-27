@@ -3,7 +3,7 @@ import { PaymentDTO } from './payment.dto';
 import { RefDTO } from './ref.dto';
 export interface OrderDTO {
   client: RefDTO;
-  addressDelivery: RefDTO;
+  deliveryAddress: RefDTO;
   payment: PaymentDTO;
   items: OrderItemDTO[];
 }

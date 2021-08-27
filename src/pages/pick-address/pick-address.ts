@@ -33,7 +33,7 @@ export class PickAddressPage {
 
           this.order = {
             client: { id: response['id'] },
-            addressDelivery: null,
+            deliveryAddress: null,
             payment: null,
             items: cart.cartItems.map(x => {
               return {
@@ -55,7 +55,7 @@ export class PickAddressPage {
   }
 
   nextPage(address: AddressDTO) {
-    this.order.addressDelivery = { id: address.id };
+    this.order.deliveryAddress = { id: address.id };
     this.navCtrl.push('PaymentPage', { order: this.order });
   }
 }
