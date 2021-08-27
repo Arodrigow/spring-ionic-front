@@ -1,3 +1,6 @@
+import { StorageService } from './../../services/storage.service';
+import { ClientDTO } from './../../models/client.dto';
+import { ClientService } from './../../services/domain/client.service';
 import { AddressDTO } from './../../models/address.dto';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -11,45 +14,28 @@ export class PickAddressPage {
 
   addresses: AddressDTO[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public storage: StorageService,
+    public clientService: ClientService) {
   }
 
   ionViewDidLoad() {
-    this.addresses = [
-      {
-        id: "1",
-        publicPlace: "Rua quinze de novembro",
-        number: "300",
-        complement: 'Apto 200',
-        district: 'Santa Monica',
-        cep: '48293822',
-        city: {
-          id: '1',
-          name: 'Uberlandia',
-          state: {
-            id: '1',
-            name: "Minas Gerais"
+    let localUser = this.storage.getLocalUser();
+    if (localUser && localUser.email) {
+      this.clientService.findByEmail(localUser.email).subscribe(
+        response => {
+          this.addresses = response['addresses']
+        },
+        error => {
+          if (error.status == 403) {
+            this.navCtrl.setRoot('HomePage');
           }
         }
-      },
-      {
-        id: "2",
-        publicPlace: "Rua alexandre de novembro",
-        number: "64",
-        complement: 'Apto 001',
-        district: 'Santa Luzia',
-        cep: '48293811',
-        city: {
-          id: '3',
-          name: 'São Paulo',
-          state: {
-            id: '2',
-            name: "São Paulo"
-          }
-        }
-      },
-
-    ]
+      );
+    } else {
+      this.navCtrl.setRoot('HomePage');
+    }
   }
 
 }
