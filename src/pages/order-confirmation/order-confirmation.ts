@@ -20,6 +20,7 @@ export class OrderConfirmationPage {
   cartItems: CartItem[];
   client: ClientDTO;
   address: AddressDTO;
+  orderCode: string;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -56,11 +57,15 @@ export class OrderConfirmationPage {
     return this.navCtrl.setRoot('CartPage')
   }
 
+  home() {
+    return this.navCtrl.setRoot('CategoriesPage')
+  }
+
   checkout() {
     this.orderService.insert(this.order).subscribe(
       response => {
-        console.log(response.headers.get('location'))
         this.cartService.createOrClearCart();
+        this.orderCode = this.extractId(response.headers.get('location'));
       },
       error => {
         if (error.status == 403) {
@@ -68,5 +73,10 @@ export class OrderConfirmationPage {
         }
       }
     );
+  }
+
+  private extractId(location: string): string {
+    let pos = location.lastIndexOf('/');
+    return location.substring(pos + 1, location.length);
   }
 }
