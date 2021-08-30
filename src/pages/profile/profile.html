@@ -31,6 +31,12 @@
       >
         Camera
       </button>
+      <button *ngIf="picture" ion-button block outline (click)="sendPicture()">
+        Send picture
+      </button>
+      <button *ngIf="picture" ion-button block outline (click)="cancel()">
+        Delete image
+      </button>
     </ion-item>
   </ion-card>
 </ion-content>
