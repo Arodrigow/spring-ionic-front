@@ -5,6 +5,7 @@ import { ClientService } from './../../services/domain/client.service';
 import { StorageService } from './../../services/storage.service';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @IonicPage()
 @Component({
@@ -16,13 +17,17 @@ export class ProfilePage {
   client: ClientDTO
   picture: string;
   cameraOn: boolean = false;
+  profileImage;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public storage: StorageService,
     public clientService: ClientService,
-    public camera: Camera) {
+    public camera: Camera,
+    public sanitizer: DomSanitizer) {
+
+    this.profileImage = 'assets/imgs/avatar-blank.png'
   }
 
   ionViewDidLoad() {
@@ -32,7 +37,14 @@ export class ProfilePage {
   getImageIfExists() {
     this.clientService.getImageFromBucket(this.client.id).subscribe(
       response => {
-        this.client.profilePicUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.client.id}.jpg`
+        this.client.profilePicUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.client.id}.jpg`;
+        this.blobToDataUrl(response).then(dataUrl => {
+          let str = dataUrl as string;
+          this.profileImage = this.sanitizer.bypassSecurityTrustUrl(str);
+        },
+          error => {
+            this.profileImage = 'assets/imgs/avatar-blank.png'
+          });
       },
       error => {}
     );
@@ -83,7 +95,7 @@ export class ProfilePage {
     this.clientService.uploadPicture(this.picture).subscribe(
       response => {
         this.picture = null;
-        this.loadData();
+        this.getImageIfExists();
       },
       error => {}
     );
@@ -110,5 +122,14 @@ export class ProfilePage {
     } else {
       this.navCtrl.setRoot('HomePage');
     }
+  }
+
+  blobToDataUrl(blob) {
+    return new Promise((fulfill, reject) => {
+      let reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = (e) => fulfill(reader.result);
+      reader.readAsDataURL(blob);
+    });
   }
 }
