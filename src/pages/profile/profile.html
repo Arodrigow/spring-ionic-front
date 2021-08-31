@@ -31,6 +31,14 @@
       >
         Camera
       </button>
+      <button
+        ion-button
+        block
+        (click)="getGalleryPicture()"
+        [disabled]="cameraOn"
+      >
+        Gallery
+      </button>
       <button *ngIf="picture" ion-button block outline (click)="sendPicture()">
         Send picture
       </button>
